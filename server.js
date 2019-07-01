@@ -26,18 +26,18 @@ function query(db, data) {
     var collection = db.collection(data.collection);
     switch (data.operacao) {
       case 'atualizar':
-        collection.update(data.where, data.set);
+            console.log(objectID(data.set));
+        collection.updateOne(objectID(data.dados.id), data.set);
+        
         break;
       case 'inserir':
         collection.insertOne(data.dados, data.callback);
         break;
       case 'pesquisar':
         collection.find().toArray(data.callback);
-        console.log(data.operacao);
         break;
     case 'pesquisar-um':
-        data.where._id = objectID(data.where._id)
-        collection.find(data.where).toArray(data.callback);
+        collection.find(objectID(data.dados.id)).toArray(data.callback);
         break;
       case 'remover':
         data.where._id = objectID(data.where._id);
@@ -57,6 +57,7 @@ app.get('/', function(req, res){
     res.send({msg:'Olá'});
 });
 
+//Salvar novo
 app.post('/api', function (req, res){
     var data = req.body;
     var dados = {
@@ -74,6 +75,7 @@ app.post('/api', function (req, res){
     connMongoDb(dados);
 });
 
+// ler todos
 app.get('/api', function (req, res){
     var dados = {
         operacao: 'pesquisar',
@@ -89,8 +91,9 @@ app.get('/api', function (req, res){
     connMongoDb(dados);
 });
 
-app.get('/api/:_id', function (req, res){
-     var data = req.body
+// ler um por ID
+app.get('/api/:id', function (req, res){
+     var data = req.params
   
     var dados = {
         operacao: 'pesquisar-um',
@@ -104,6 +107,25 @@ app.get('/api/:_id', function (req, res){
             }
         }
     }
-    console.log(dados)
+    connMongoDb(dados);
+});
+
+// Atualizar
+app.put('/api/:id', function(req, res){
+    var data = req.params
+
+    var dados = {
+        operacao: 'atualizar',
+        dados: data,
+        collection: 'postagens',
+        callback: function(err, records){
+            if(err){
+                res.json({'status' : 'erro'})
+            }else{
+                res.json(records);
+            }
+        }
+    }
+    console.log(dados);
     connMongoDb(dados);
 });
