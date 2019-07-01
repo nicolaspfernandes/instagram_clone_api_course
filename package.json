@@ -1,0 +1,24 @@
+{
+  "name": "instagram_clone_api_course",
+  "version": "1.0.0",
+  "description": "api rest course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrunoCBarbosa/instagram_clone_api_course.git"
+  },
+  "author": "Bruno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrunoCBarbosa/instagram_clone_api_course/issues"
+  },
+  "homepage": "https://github.com/BrunoCBarbosa/instagram_clone_api_course#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.2.7"
+  }
+}
