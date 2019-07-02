@@ -20,28 +20,24 @@ var connMongoDb = function(data){
         query(db, data);
         client.close();
     });
-}
+} 
 
+/* query onde as funções irão passar */
 function query(db, data) {
     var collection = db.collection(data.collection);
     switch (data.operacao) {
-      case 'atualizar':
-        // console.log(JSON.stringify(data))
-        collection.updateOne({_id: objectID(data.dados.id)}, {$set:{ info: 'alguma coisa' }});
-        
+        case 'atualizar':
+            collection.updateOne(data.where, data.set, data.multi, data.callback);
         break;
-      case 'inserir':
-        collection.insertOne(data.dados, data.callback);
+        case 'inserir':
+            collection.insertOne(data.dados, data.callback);
         break;
-      case 'pesquisar':
-        collection.find().toArray(data.callback);
+        case 'pesquisar':
+            collection.find(data.dados).toArray(data.callback);
         break;
-    case 'pesquisar-um':
-        collection.find(objectID(data.dados.id)).toArray(data.callback);
-        break;
-      case 'remover':
-        data.where._id = objectID(data.where._id);
-        collection.remove(data.where, data.callback);
+        case 'remover':
+            data.where._id = objectID(data.where._id);
+            collection.remove(data.where, data.callback);
         break;
     }
   }
@@ -59,10 +55,9 @@ app.get('/', function(req, res){
 
 //Salvar novo
 app.post('/api', function (req, res){
-    var data = req.body;
     var dados = {
         operacao: 'inserir',
-        dados: data,
+        dados: req.body,
         collection: 'postagens',
         callback: function(err, records){
             if(err){
@@ -81,6 +76,7 @@ app.get('/api', function (req, res){
         operacao: 'pesquisar',
         collection: 'postagens',
         callback: function(err, records){
+            console.log({err, records});
             if(err){
                 res.json({'status' : 'erro'});
             }else{
@@ -93,11 +89,9 @@ app.get('/api', function (req, res){
 
 // ler um por ID
 app.get('/api/:id', function (req, res){
-     var data = req.params
-  
     var dados = {
-        operacao: 'pesquisar-um',
-         dados: data,
+        operacao: 'pesquisar',
+        dados: objectID(req.params.id),
         collection: 'postagens',
         callback: function(err, records){
             if(err){
@@ -112,20 +106,38 @@ app.get('/api/:id', function (req, res){
 
 // Atualizar
 app.put('/api/:id', function(req, res){
-    var data = req.params
-    
     var dados = {
         operacao: 'atualizar',
-        dados: data,
+        where:{ _id: objectID(req.params.id)},
+        set: { $set: {titulo: req.body.titulo} },
+        multi: {},
         collection: 'postagens',
         callback: function(err, records){
             if(err){
                 res.json({'status' : 'erro'})
             }else{
                 res.json(records);
+               
+    
             }
         }
     }
-    console.log(JSON.stringify(data))
+    console.log(dados);
+    connMongoDb(dados);
+});
+
+app.delete('/api/:id', function(req, res){
+    var dados = {
+        operacao: 'remover',
+        where: {_id: req.params.id},
+        collection: 'postagens',
+        callback: function(err, records){
+            if(err){
+                res.json({'status' : 'erro'});
+            }else{
+                res.json(records);
+            }
+        }
+    }
     connMongoDb(dados);
 });
