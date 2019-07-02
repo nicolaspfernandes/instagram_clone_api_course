@@ -1,0 +1,94 @@
+instalar:
+1) entrar em mongodb.com e clicar em try free
+2)clicar em server para baixar
+3) Criar os diretórios data/db em C:/
+4) abri cmd e entrar dentro do diretório baixado do mongo /bin e executar ./mongod.exe, assim o servidor será iniciado
+5) se estiver tudo certo pode ser aberto um outro cmd e dentro de /bin executar ./mongo.exe.
+6) Entrar em https://robomongo.org e clicar em download robo 3t, para baixar a interface gráfica do mongo.
+
+/* ============== SINTAXE ================= */
+/* Operadores de comparação */
+= ($eq)
+!= ($ne)
+< ($lt)
+<= ($lte)
+> ($gt)
+>= ($gte)
+/* =========================== */
+
+/* ========= BÁSICOS =============*/
+/* Mostrar collections */
+show dbs;
+
+/* criar uma collection (não são tabelas, são collections) */
+db.createCollection
+
+/* ver a relação de todas as collections */
+db.getCollectionNames()
+
+/* remover uma collection */
+db.nome_collection.drop()
+
+/* entrar no banco */
+use nome_banco 
+
+/* inserir um registro (campo na tabela relacional) dentro do collection*/
+db.nome_collection.save({nome_chave : 'chave'})
+
+/* criará o cammpo e o banco */
+db.nome_tabela.save({nome_chave : 'chave'}); 
+
+/* apagar banco selecionado */
+db.dropDatabase();
+/* =================================== */
+
+/* ============== SELECT =============== */
+/* encontrar o último registro da collection inserida*/
+db.nome_collection.findOne()
+
+/* encontrar todos os registros de uma collection */
+db.nome_collection.find()
+
+/* encontrar todos os registros de uma collection organizado pulando linha */
+db.nome_collection.find().pretty()
+
+/* encontrar informações que seja, igual a algo ($eq significa =). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$eq:"chave"}}).pretty()
+
+/* encontrar informações que seja, diferente a algo ($ne significa !=). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$ne:"chave"}}).pretty()
+
+/* encontrar informações que seja, menor a algo ($lt significa <). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$lt:chave}}).pretty()
+
+/* encontrar informações que seja, menor ou igual a algo ($lte significa <=). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$lte:chave}}).pretty()
+
+/* encontrar informações que seja, maior a algo ($gt significa >). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$gt:chave}}).pretty()
+
+/* encontrar informações que seja, maior ou igual a algo ($gt significa >=). Se usar o pretty() irá organizar por linhas */
+db.collection.find({nome_chave:{$gte:chave}}).pretty()
+
+/* encontrar informações que possuam o filro e, somente necessita ir colocando o que for necessário com uma vírgula */
+db.collection.find({nome_chave:{op:"chave"}, nome_chave:{op:"chave"}}).pretty()
+
+/* encontrar informações que possuam o filro ou, abra uma chave $or[] e dentro vá colocando o que for necessário com uma vírgula */
+db.collection.find({$or:[{nome_chave:{op:"chave"}},{nome_chave:{op:"chave"}}]}).pretty()
+/* ======================================= */
+
+/* ============== UPDATE ============= */
+/* comando para atualizar é o update e $set, a chave antes do set é a antiga, e após, será o resultado se o multi estiver em false ou não estiver sendo citado, 
+sómente irá atualizar o primeiro registro encontrado*/
+db.collection.update({nome_chave:'chave'},{$set:{nome_chave:'chave'}})
+db.collection.update({nome_chave:'chave'},{$set:{nome_chave:'chave'}, multi: false})
+
+/* Se estiver em true, todos os registros serão atualizados */
+db.collection.update({nome_chave:'chave'},{$set:{nome_chave:'chave'}},{multi:true})
+/* ============================================ */
+
+/* =============== REMOVER DOCUMENTOS ===================== */
+db.alunos.remove({nome:'Maria'})
+
+/* Exemplo de remove com > */
+db.alunos.remove({idade:{$gt:30}})
