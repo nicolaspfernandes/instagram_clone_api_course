@@ -26,8 +26,8 @@ function query(db, data) {
     var collection = db.collection(data.collection);
     switch (data.operacao) {
       case 'atualizar':
-            console.log(objectID(data.set));
-        collection.updateOne(objectID(data.dados.id), data.set);
+        // console.log(JSON.stringify(data))
+        collection.updateOne({_id: objectID(data.dados.id)}, {$set:{ info: 'alguma coisa' }});
         
         break;
       case 'inserir':
@@ -113,7 +113,7 @@ app.get('/api/:id', function (req, res){
 // Atualizar
 app.put('/api/:id', function(req, res){
     var data = req.params
-
+    
     var dados = {
         operacao: 'atualizar',
         dados: data,
@@ -126,6 +126,6 @@ app.put('/api/:id', function(req, res){
             }
         }
     }
-    console.log(dados);
+    console.log(JSON.stringify(data))
     connMongoDb(dados);
 });
