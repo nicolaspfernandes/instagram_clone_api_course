@@ -6,7 +6,7 @@ function QueryDAO(connection){
 
 /* query onde as funções irão passar */
 QueryDAO.prototype.query = function (db, data) {
-    var colelection = db.collection(data.collection);
+    var collection = db.collection(data.collection);
     switch (data.operacao) {
         case 'atualizar':
             collection.updateOne(data.where, data.set, data.multi, data.callback);

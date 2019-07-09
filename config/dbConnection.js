@@ -4,11 +4,11 @@ var dbName = 'instagram';
 var mongoURL = 'mongodb://localhost:27017/' + dbName;
 
 var connMongoDb = function(app, data){
-    var dbQuery =  new app.models.queryDAO(connection);
+    // var dbQuery =  new app.app.models.queryDAO(connection);
 
     mongoDb.connect(mongoURL, {useNewUrlParser:true}, function(err, client){
         var db = client.db(dbName);
-        dbQuery.query(db, data);
+       query(db, data);
         client.close();
     });
 }
